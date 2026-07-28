@@ -1,0 +1,25 @@
+import time
+import schedule
+from PIL import Image
+
+from capture_screen import capture_full_screen
+from template_match import check_and_click
+
+TEMPLATE_PATH = "assets/idle_state.png"
+
+
+def job():
+    print("시작...")
+    screenshot_path = capture_full_screen()
+    screenshot = Image.open(screenshot_path)
+    check_and_click(screenshot, TEMPLATE_PATH)
+
+
+if __name__ == "__main__":
+    job()  # 시작하자마자 1회 실행
+    schedule.every(30).minutes.do(job)
+
+    print("30분마다 반복 실행 중... (Ctrl+C로 종료)")
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
