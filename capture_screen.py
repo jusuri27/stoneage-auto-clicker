@@ -10,8 +10,13 @@ def capture_full_screen() -> str:
     filename = datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
     filepath = os.path.join(OUTPUT_DIR, filename)
 
-    screenshot = pyautogui.screenshot()
-    screenshot.save(filepath)
+    try:
+        screenshot = pyautogui.screenshot()
+        screenshot.save(filepath)
+    except Exception as e:
+        # 화면 캡처 실패 시 스케줄러가 죽지 않도록 원인을 명확히 알려주고 상위로 전파
+        raise RuntimeError(f"화면 캡처 실패: {e}") from e
+
     return filepath
 
 
