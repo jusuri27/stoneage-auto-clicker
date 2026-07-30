@@ -72,8 +72,7 @@ def check_and_click(screen: Image.Image, template_paths, threshold: float = 0.8)
 if __name__ == "__main__":
     from capture_screen import capture_full_screen
 
-    screenshot_path = capture_full_screen()
-    screenshot = Image.open(screenshot_path)
+    screenshot = capture_full_screen()
 
     check_and_click(screenshot, [
         "assets/idle_state_beginner.png",

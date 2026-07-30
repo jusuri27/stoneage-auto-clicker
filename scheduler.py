@@ -1,8 +1,7 @@
 import time
 import schedule
-from PIL import Image
 
-from capture_screen import capture_full_screen
+from capture_screen import capture_full_screen, save_screenshot
 from template_match import check_and_click
 
 TEMPLATE_PATHS = [
@@ -15,9 +14,12 @@ TEMPLATE_PATHS = [
 def job():
     print("시작...")
     try:
-        screenshot_path = capture_full_screen()
-        screenshot = Image.open(screenshot_path)
-        check_and_click(screenshot, TEMPLATE_PATHS)
+        screenshot = capture_full_screen()
+        match_count = check_and_click(screenshot, TEMPLATE_PATHS)
+        if match_count > 0:
+            # 매칭 성공(클릭 발생)한 회차만 남겨서 로그 용량 낭비 방지
+            saved_path = save_screenshot(screenshot)
+            print(f"매칭 성공 로그 저장: {saved_path}")
     except Exception as e:
         # 한 회차 실패로 스케줄 루프 전체가 종료되지 않도록 여기서 잡아서 다음 주기를 계속 진행
         print(f"작업 실행 중 오류 발생: {e}")
