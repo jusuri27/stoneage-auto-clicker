@@ -1,23 +1,32 @@
 import time
 import schedule
+import pyautogui
 
 from capture_screen import capture_full_screen, save_screenshot
 from template_match import check_and_click, run_balloon_popup_flow
 
-TEMPLATE_PATHS = [
-    "assets/idle_state_beginner.png",
-    "assets/idle_state_intermediate.png",
-    "assets/idle_state_advanced.png",
-]
 BALLOON_ICON_PATH = "assets/balloon_icon.png"
 FORM_START_BUTTON_PATH = "assets/form_start_button.png"
+
+
+def get_template_paths():
+    # 템플릿 매칭은 화면 해상도에 따라 픽셀 크기가 달라져 확신도가 크게 떨어지므로,
+    # 1920x1080 / 2560x1440 환경을 오가며 써도 되도록 실행 시점 해상도에 맞는 에셋을 고른다
+    width, height = pyautogui.size()
+    resolution = "1920" if width <= 1920 else "2560"
+    print(f"현재 해상도: {width}x{height} -> {resolution} 템플릿 세트 사용")
+    return [
+        f"assets/idle_state_beginner_{resolution}.png",
+        f"assets/idle_state_intermediate_{resolution}.png",
+        f"assets/idle_state_advanced_{resolution}.png",
+    ]
 
 
 def job():
     print("시작...")
     try:
         screenshot = capture_full_screen()
-        match_count = check_and_click(screenshot, TEMPLATE_PATHS)
+        match_count = check_and_click(screenshot, get_template_paths())
         if match_count > 0:
             # 매칭 성공(클릭 발생)한 회차만 남겨서 로그 용량 낭비 방지
             saved_path = save_screenshot(screenshot)

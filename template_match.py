@@ -129,7 +129,7 @@ if __name__ == "__main__":
     screenshot = capture_full_screen()
 
     check_and_click(screenshot, [
-        "assets/idle_state_beginner.png",
-        "assets/idle_state_intermediate.png",
-        "assets/idle_state_advanced.png",
+        "assets/idle_state_beginner_2560.png",
+        "assets/idle_state_intermediate_2560.png",
+        "assets/idle_state_advanced_2560.png",
     ])
