@@ -3,6 +3,8 @@ from datetime import datetime
 import pyautogui
 from PIL import Image
 
+from log_utils import log
+
 OUTPUT_DIR = "match_success_log"
 
 
@@ -26,4 +28,4 @@ def save_screenshot(screenshot: Image.Image) -> str:
 if __name__ == "__main__":
     screenshot = capture_full_screen()
     saved_path = save_screenshot(screenshot)
-    print(f"저장 완료: {saved_path}")
+    log(f"저장 완료: {saved_path}")

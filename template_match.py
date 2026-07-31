@@ -6,6 +6,8 @@ import pyautogui
 import pygetwindow as gw
 from PIL import Image
 
+from log_utils import log
+
 pyautogui.FAILSAFE = True  # 마우스를 화면 좌상단 모서리로 이동하면 즉시 중단
 
 def find_all_templates(screen: Image.Image, template_paths, threshold: float = 0.8):
@@ -64,12 +66,12 @@ def click_center(match: dict):
 def check_and_click(screen: Image.Image, template_paths, threshold: float = 0.8) -> int:
     matches = find_all_templates(screen, template_paths, threshold)
     if not matches:
-        print(f"매칭 실패: {template_paths}를 찾지 못했습니다.")
+        log(f"매칭 실패: {template_paths}를 찾지 못했습니다.")
         return 0
 
-    print(f"매칭 성공: {len(matches)}개")
+    log(f"매칭 성공: {len(matches)}개")
     for i, match in enumerate(matches, 1):
-        print(f"  [{i}] template={match['template']} confidence={match['confidence']:.4f} at ({match['x']}, {match['y']})")
+        log(f"  [{i}] template={match['template']} confidence={match['confidence']:.4f} at ({match['x']}, {match['y']})")
         click_match(match)
         time.sleep(2)  # 클릭 사이 최소 간격
 
@@ -92,14 +94,14 @@ def run_balloon_popup_flow(
             screen = capture_full_screen()
             icon_matches = find_all_templates(screen, icon_template_path, threshold)
         except Exception as e:
-            print(f"풍선 아이콘 매칭 중 오류 발생: {e}")
+            log(f"풍선 아이콘 매칭 중 오류 발생: {e}")
             break
 
         if not icon_matches:
             break
 
         icon_match = icon_matches[0]  # confidence가 가장 높은 아이콘부터 처리
-        print(f"풍선 아이콘 클릭: confidence={icon_match['confidence']:.4f} at ({icon_match['x']}, {icon_match['y']})")
+        log(f"풍선 아이콘 클릭: confidence={icon_match['confidence']:.4f} at ({icon_match['x']}, {icon_match['y']})")
         click_center(icon_match)
         time.sleep(1)  # 팝업이 뜰 때까지 대기
 
@@ -107,15 +109,15 @@ def run_balloon_popup_flow(
             popup_screen = capture_full_screen()
             confirm_matches = find_all_templates(popup_screen, confirm_template_path, threshold)
         except Exception as e:
-            print(f"양식 시작 버튼 매칭 중 오류 발생: {e}")
+            log(f"양식 시작 버튼 매칭 중 오류 발생: {e}")
             break
 
         if not confirm_matches:
-            print("양식 시작 버튼을 찾지 못했습니다.")
+            log("양식 시작 버튼을 찾지 못했습니다.")
             break
 
         confirm_match = confirm_matches[0]
-        print(f"양식 시작 버튼 클릭: confidence={confirm_match['confidence']:.4f}")
+        log(f"양식 시작 버튼 클릭: confidence={confirm_match['confidence']:.4f}")
         click_center(confirm_match)
         handled_count += 1
         time.sleep(2)  # 팝업이 닫히고 다음 아이콘 탐색 전 최소 간격
