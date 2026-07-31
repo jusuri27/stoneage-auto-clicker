@@ -53,6 +53,7 @@ def click_match(match: dict):
     pyautogui.moveTo(center_x, center_y)
     pyautogui.click() # 대기 상태 아이콘 클릭
     time.sleep(1)
+    pyautogui.moveTo(center_x, center_y + 100)  # 팝업 확인 버튼이 아이콘보다 아래에 있어 100px 내려서 클릭
     pyautogui.click() # 팝업 화면(아이콘 클릭시) 닫기 위해서 다시 클릭
 
 
