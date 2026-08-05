@@ -10,7 +10,7 @@ from log_utils import log
 
 pyautogui.FAILSAFE = True  # 마우스를 화면 좌상단 모서리로 이동하면 즉시 중단
 
-def find_all_templates(screen: Image.Image, template_paths, threshold: float = 0.8):
+def find_all_templates(screen: Image.Image, template_paths, threshold: float = 0.7):
     # 초급/중급/고급처럼 여러 템플릿을 한 번에 검사할 수 있도록 문자열 하나도 리스트로 통일
     if isinstance(template_paths, str):
         template_paths = [template_paths]
@@ -64,7 +64,7 @@ def click_center(match: dict):
     pyautogui.click()
 
 
-def check_and_click(screen: Image.Image, template_paths, threshold: float = 0.8) -> int:
+def check_and_click(screen: Image.Image, template_paths, threshold: float = 0.7) -> int:
     matches = find_all_templates(screen, template_paths, threshold)
     if not matches:
         log(f"매칭 실패: {template_paths}를 찾지 못했습니다.")
@@ -82,7 +82,7 @@ def check_and_click(screen: Image.Image, template_paths, threshold: float = 0.8)
 def run_balloon_popup_flow(
     icon_template_path: str,
     confirm_template_path: str,
-    threshold: float = 0.8,
+    threshold: float = 0.7,
     max_iterations: int = 20,
 ) -> int:
     # 풍선 아이콘 클릭 -> 팝업의 양식 시작 버튼 클릭을 아이콘이 더 이상 안 보일 때까지 반복
